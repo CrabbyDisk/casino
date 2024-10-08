@@ -1,7 +1,5 @@
-use std::fs::File;
-use std::fs;
-use std::path::Path;
-use std::io::{self, Read};
+mod games;
+mod utils;
 
 const SAVE_FILE: &str = "savefile.txt";
 
@@ -19,29 +17,27 @@ struct Profile {
 
 fn main() {
     println!("Hello, world!");
-    let mut profile: Profile = match load_profile() {
+    let mut profile: Profile = match utils::load_profile(SAVE_FILE) {
         Ok(x) => x,
         Err(CasinoError::NoSaveFile) => new_profile(),
         Err(CasinoError::BadSaveFile) => new_profile(),
     };
-    dbg!(profile);
 
+    utils::save_profile(&profile, SAVE_FILE);
+
+    match utils::option_menu("What do you want do play?", vec!["Coin flip", "Quit"]) {
+        "Coin flip" => games::coinflip(profile),
+        "Quit" => return,
+        _ => panic!("wtf just happened here, HOW TF DID WE GET HERE"),
+    };
 }
 
-fn load_profile() -> Result<Profile, CasinoError> {
-    if !Path::new(SAVE_FILE).exists() {
-       return Err(CasinoError::NoSaveFile);
-    }
-    let data = fs::read_to_string(SAVE_FILE).unwrap();
-    let keys: Vec<&str> = data.lines().collect();
-    Ok(Profile {money: keys[0].parse().unwrap(), xp: keys[1].parse().unwrap(), name: keys[2].to_string()})
-}
-
-fn save_profile(profile: Profile) {
-    let data = format!("{}\n{}\n{}", profile.money, profile.xp, profile.name);
-    fs::write(SAVE_FILE, data);
-}
+fn menu(profile: Profile) {}
 
 fn new_profile() -> Profile {
-    Profile {money: 0, xp: 0, name: "bob".to_string()}
+    Profile {
+        money: 0,
+        xp: 0,
+        name: "bob".to_string(),
+    }
 }
