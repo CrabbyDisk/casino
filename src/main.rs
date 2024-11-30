@@ -21,6 +21,10 @@ struct Profile {
 enum MainMenuOptions {
     #[strum(message = "Coin Flip")]
     CoinFlip,
+
+    #[strum(message = "Slot Machine")]
+    SlotMachine,
+
     #[strum(message = "Quit")]
     Quit,
 }
@@ -35,12 +39,11 @@ fn main() {
 
     profile = match utils::option_menu::<MainMenuOptions>("What do you want to do") {
         MainMenuOptions::CoinFlip => games::coinflip(profile),
+        MainMenuOptions::SlotMachine => games::slot(profile),
         MainMenuOptions::Quit => return,
     };
     utils::save_profile(&profile, SAVE_FILE);
 }
-
-fn menu(profile: Profile) {}
 
 fn new_profile() -> Profile {
     Profile {
