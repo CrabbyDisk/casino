@@ -13,17 +13,16 @@ enum CoinFlipOption {
 
 pub fn coinflip(mut profile: Profile) -> Profile {
     let amount = utils::ask_amount(&profile);
-    let choice = match utils::option_menu::<CoinFlipOption>("What side do you chose") {
-        CoinFlipOption::Heads => true,
-        CoinFlipOption::Tails => false,
+    match utils::option_menu::<CoinFlipOption>("What side do you chose") {
+        CoinFlipOption::Heads => {
+            println!("win");
+            profile.money += amount;
+        }
+        CoinFlipOption::Tails => {
+            println!("lose");
+            profile.money -= amount;
+        }
     };
-    if choice == random::<bool>() {
-        println!("win");
-        profile.money += amount;
-    } else {
-        println!("lose");
-        profile.money -= amount;
-    }
     profile
 }
 
