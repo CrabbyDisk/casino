@@ -30,18 +30,20 @@ enum MainMenuOptions {
 }
 
 fn main() {
-    println!("Hello, world!");
     let mut profile: Profile = match utils::load_profile(SAVE_FILE) {
         Ok(x) => x,
         Err(CasinoError::NoSaveFile) => new_profile(),
         Err(CasinoError::BadSaveFile) => new_profile(),
     };
 
-    profile = match utils::option_menu::<MainMenuOptions>("What do you want to do") {
-        MainMenuOptions::CoinFlip => games::coinflip(profile),
-        MainMenuOptions::SlotMachine => games::slot(profile),
-        MainMenuOptions::Quit => return,
-    };
+    loop {
+        profile = match utils::option_menu::<MainMenuOptions>("What do you want to do") {
+            MainMenuOptions::CoinFlip => games::coinflip(profile),
+            MainMenuOptions::SlotMachine => games::slot(profile),
+            MainMenuOptions::Quit => break,
+        };
+    }
+
     utils::save_profile(&profile, SAVE_FILE);
 }
 
