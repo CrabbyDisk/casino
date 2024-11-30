@@ -26,3 +26,7 @@ pub fn coinflip(mut profile: Profile) -> Profile {
     }
     profile
 }
+
+pub fn slot(mut profile: Profile) -> Profile {
+    profile
+}

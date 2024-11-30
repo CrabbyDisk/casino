@@ -83,5 +83,5 @@ pub fn option_menu<T: VariantArray + EnumMessage + Clone>(prompt: &str) -> T {
         execute!(stdout(), Clear(ClearType::Purge), MoveTo(0, 0)).unwrap();
     }
     disable_raw_mode().unwrap();
-    T::VARIANTS[0].clone()
+    T::VARIANTS[selected].clone()
 }
